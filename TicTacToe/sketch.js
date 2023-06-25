@@ -121,12 +121,12 @@ function NextTurn() {
 
 function mousePressed() {
   let x, y;
-  if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
+  if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height && currentPlayer == human) {
     x = floor(mouseX / w);
     y = floor(mouseY / h);
 
     if (board[y][x] == "") {
-      board[y][x] = "X";
+      board[y][x] = players[human];
     }
   }
 }
