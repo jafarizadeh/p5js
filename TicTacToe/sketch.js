@@ -14,7 +14,10 @@ function setup() {
   createCanvas(400, 400);
 
   currentPlayer = floor(random(players.length));
+  human = 0;
+  ai = 1;
 
+  console.log(ai, human);
   calcAvailable();
 }
 
