@@ -36,7 +36,7 @@ function draw() {
     }
     noLoop();
   } else {
-    //NextTurn();
+
   }
 }
 
@@ -109,14 +109,17 @@ function checkWinner() {
   }
 }
 
-function NextTurn() {
-  let index = floor(random(available.length));
+function MoveRand() {
+  calcAvailable();
+  
   if (available.length > 0) {
-    let spot = available.splice(index, 1)[0];
+    let index = floor(random(available.length));
+    let spot = available[index];
     let i = spot[0];
     let j = spot[1];
+
     board[i][j] = players[currentPlayer];
-    currentPlayer = (currentPlayer + 1) % players.length;
+    currentPlayer = human;
   }
 }
 
