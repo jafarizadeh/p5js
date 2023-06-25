@@ -1,12 +1,12 @@
-let board =
-  [
-    ['', '', ''],
-    ['', '', ''],
-    ['', '', '']
-  ];
+let board = [
+  ["", "", ""],
+  ["", "", ""],
+  ["", "", ""],
+];
 
 let available = [];
-let players = ['X', 'O'];
+let w, h;
+let players = ["X", "O"];
 let currentPlayer;
 
 function setup() {
@@ -14,21 +14,29 @@ function setup() {
 
   currentPlayer = floor(random(players.length));
 
-  for (let i = 0; i < 3; i++) {
-    for (let j = 0; j < 3; j++) {
-      if (board[i][j] == '') {
-        available.push([i, j]);
-      }
-    }
-  }
+  calcAvailable();
 }
 
 function draw() {
   background(230);
   strokeWeight(3);
-  let w = width / 3;
-  let h = height / 3;
+  w = width / 3;
+  h = height / 3;
+  drawBoard();
+  let result = checkWinner();
+  if (result != false) {
+    if (result == "tie") {
+      console.log("tie");
+    } else {
+      console.log(`Winner is ${result}`);
+    }
+    noLoop();
+  } else {
+    NextTurn();
+  }
+}
 
+function drawBoard() {
   line(w, 0, w, height);
   line(w * 2, 0, w * 2, height);
 
@@ -38,8 +46,8 @@ function draw() {
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
       let spot = board[i][j];
-      let x = (j * w) + w / 2;
-      let y = (i * h) + h / 2;
+      let x = j * w + w / 2;
+      let y = i * h + h / 2;
       if (spot == players[0]) {
         xr = w / 4;
         strokeWeight(5);
@@ -51,18 +59,20 @@ function draw() {
       }
     }
   }
+}
 
-  let result = checkWinner();
-  if (result != false) {
-    console.log(result);
-    noLoop();
-  } else {
-    NextTurn();
+function calcAvailable() {
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (board[i][j] == "") {
+        available.push([i, j]);
+      }
+    }
   }
 }
 
 function equal3(a, b, c) {
-  return (a == b && a == c && a != '');
+  return a == b && a == c && a != "";
 }
 
 function checkWinner() {
@@ -87,11 +97,9 @@ function checkWinner() {
     winner = board[0][2];
   }
 
-
   if (winner == false && available.length == 0) {
-    return 'tie';
-  }
-  else {
+    return "tie";
+  } else {
     return winner;
   }
 }
