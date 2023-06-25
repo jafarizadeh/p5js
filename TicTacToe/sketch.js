@@ -1,8 +1,8 @@
 let board =
   [
-    ['X', 'O', ''],
-    ['X', 'X', 'O'],
-    ['O', '', '']
+    ['', '', ''],
+    ['', '', ''],
+    ['', '', '']
   ];
 
 let available = [];
@@ -12,8 +12,8 @@ let currentPlayer;
 function setup() {
   createCanvas(400, 400);
 
-  currentPlayer = random(players.length);
-  
+  currentPlayer = floor(random(players.length));
+
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
       if (board[i][j] == '') {
@@ -51,4 +51,19 @@ function draw() {
       }
     }
   }
+}
+
+function NextTurn() {
+  let index = floor(random(available.length));
+  if (available.length > 0) {
+    let spot = available.splice(index, 1)[0];
+    let i = spot[0];
+    let j = spot[1];
+    board[i][j] = players[currentPlayer];
+    currentPlayer = (currentPlayer + 1) % players.length;
+  }
+}
+
+function mousePressed() {
+  NextTurn();
 }
