@@ -6,6 +6,7 @@ let board = [
 
 let available = [];
 let w, h;
+let human, ai;
 let players = ["X", "O"];
 let currentPlayer;
 
@@ -32,7 +33,7 @@ function draw() {
     }
     noLoop();
   } else {
-    NextTurn();
+    //NextTurn();
   }
 }
 
@@ -115,6 +116,14 @@ function NextTurn() {
   }
 }
 
-// function mousePressed() {
-//   NextTurn();
-// }
+function mousePressed() {
+  let x, y;
+  if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
+    x = floor(mouseX / w);
+    y = floor(mouseY / h);
+
+    if (board[y][x] == "") {
+      board[y][x] = "X";
+    }
+  }
+}
