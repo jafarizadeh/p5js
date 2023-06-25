@@ -3,12 +3,24 @@ let board =
     ['X', 'O', ''],
     ['X', 'X', 'O'],
     ['O', '', '']
-  ]
+  ];
 
+let available = [];
 let players = ['X', 'O'];
+let currentPlayer;
 
 function setup() {
   createCanvas(400, 400);
+
+  currentPlayer = random(players.length);
+  
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (board[i][j] == '') {
+        available.push([i, j]);
+      }
+    }
+  }
 }
 
 function draw() {
