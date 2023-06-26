@@ -11,16 +11,21 @@ let players = ["X", "O"];
 let currentPlayer;
 let way;
 let typeWin;
+let scores = {
+  X: 1,
+  O: -1,
+  tie: 0,
+};
 
 function setup() {
   createCanvas(400, 400);
 
-  currentPlayer = floor(random(players.length));
-  human = 0;
-  ai = 1;
+  // currentPlayer = floor(random(players.length));
+  currentPlayer = 0;
+  human = 1;
+  ai = 0;
 
   calcAvailable();
-  strokeWeight(25);
   console.log(`Your Player ${players[human]}`);
 }
 
@@ -42,7 +47,7 @@ function draw() {
   }
 
   if (currentPlayer == ai) {
-    MoveRand();
+    BestMove();
   }
 }
 
@@ -127,18 +132,22 @@ function checkWinner() {
   }
 }
 
-function MoveRand() {
-  calcAvailable();
-
-  if (available.length > 0) {
-    let index = floor(random(available.length));
-    let spot = available[index];
-    let i = spot[0];
-    let j = spot[1];
-
-    board[i][j] = players[currentPlayer];
-    currentPlayer = human;
+function BestMove() {
+  let bestScore = -Infinity;
+  let move;
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (board[i][j] == "") {
+        board[i][j] = players[ai];
+        let scores = minimax(board, false);
+      }
+    }
   }
+}
+
+function minimax (board, isMaximizing)
+{
+
 }
 
 function drawEndLine(way) {
@@ -173,6 +182,7 @@ function drawEndLine(way) {
     y2 = height - h / 4;
   }
 
+  strokeWeight(25);
   stroke(255, 10, 10, 127);
   line(x1, y1, x2, y2);
 }
