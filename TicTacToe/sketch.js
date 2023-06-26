@@ -92,6 +92,7 @@ function equal3(a, b, c) {
 }
 
 function checkWinner() {
+  calcAvailable();
   let winner = false;
   for (let i = 0; i < 3; i++) {
     if (equal3(board[i][0], board[i][1], board[i][2])) {
@@ -140,14 +141,53 @@ function BestMove() {
       if (board[i][j] == "") {
         board[i][j] = players[ai];
         let scores = minimax(board, false);
+        board[i][j] = "";
+        if (scores > bestScore) {
+          bestScore = scores;
+          move = { i, j };
+        }
       }
     }
   }
+  if (move !== undefined) {
+    board[move.i][move.j] = players[ai];
+    currentPlayer = human;
+  }
 }
 
-function minimax (board, isMaximizing)
-{
+function minimax(board, isMaximizing) {
+  let result = checkWinner();
+  if (result != false) {
+    return scores[result];
+  }
 
+  if (isMaximizing) {
+    let bestScore = -Infinity;
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (board[i][j] == "") {
+          board[i][j] = players[ai];
+          let scores = minimax(board, false);
+          board[i][j] = "";
+          bestScore = max(bestScore, scores);
+        }
+      }
+    }
+    return bestScore;
+  } else {
+    let bestScore = Infinity;
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (board[i][j] == "") {
+          board[i][j] = players[human];
+          let scores = minimax(board, true);
+          board[i][j] = "";
+          bestScore = min(bestScore, scores);
+        }
+      }
+    }
+    return bestScore;
+  }
 }
 
 function drawEndLine(way) {
