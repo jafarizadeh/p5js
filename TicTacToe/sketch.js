@@ -9,6 +9,8 @@ let w, h;
 let human, ai;
 let players = ["X", "O"];
 let currentPlayer;
+let way;
+let typeWin;
 
 function setup() {
   createCanvas(400, 400);
@@ -17,8 +19,9 @@ function setup() {
   human = 0;
   ai = 1;
 
-  console.log(ai, human);
   calcAvailable();
+  strokeWeight(25);
+  console.log(`Your Player ${players[human]}`);
 }
 
 function draw() {
@@ -33,10 +36,13 @@ function draw() {
       console.log("tie");
     } else {
       console.log(`Winner is ${result}`);
+      drawEndLine(way);
     }
     noLoop();
-  } else {
+  }
 
+  if (currentPlayer == ai) {
+    MoveRand();
   }
 }
 
@@ -85,21 +91,33 @@ function checkWinner() {
   for (let i = 0; i < 3; i++) {
     if (equal3(board[i][0], board[i][1], board[i][2])) {
       winner = board[i][0];
+      way = { p1: [i, 0], p2: [i, 0] };
+      typeWin = 1;
+      // horizontally
     }
   }
 
   for (let i = 0; i < 3; i++) {
     if (equal3(board[0][i], board[1][i], board[2][i])) {
       winner = board[0][i];
+      way = { p1: [0, i], p2: [2, i] };
+      typeWin = 2;
+      // Vertically
     }
-  }
-
-  if (equal3(board[0][0], board[1][1], board[2][2])) {
-    winner = board[0][0];
   }
 
   if (equal3(board[0][2], board[1][1], board[2][0])) {
     winner = board[0][2];
+    way = { p1: [0, 2], p2: [2, 0] };
+    typeWin = 3;
+    // diagonally "/"
+  }
+
+  if (equal3(board[0][0], board[1][1], board[2][2])) {
+    winner = board[0][0];
+    way = { p1: [0, 0], p2: [2, 2] };
+    typeWin = 4;
+    // diagonally "\"
   }
 
   if (winner == false && available.length == 0) {
@@ -111,7 +129,7 @@ function checkWinner() {
 
 function MoveRand() {
   calcAvailable();
-  
+
   if (available.length > 0) {
     let index = floor(random(available.length));
     let spot = available[index];
@@ -121,6 +139,42 @@ function MoveRand() {
     board[i][j] = players[currentPlayer];
     currentPlayer = human;
   }
+}
+
+function drawEndLine(way) {
+  let x1, x2, y1, y2;
+  let p1 = way.p1;
+  let p2 = way.p2;
+
+  if (typeWin == 1) {
+    x1 = w / 4;
+    y1 = p1[0] * h + h / 2;
+    x2 = width - w / 4;
+    y2 = p1[0] * h + h / 2;
+  }
+  if (typeWin == 2) {
+    x1 = p1[1] * w + w / 2;
+    y1 = h / 4;
+    x2 = p1[1] * w + w / 2;
+    y2 = height - h / 4;
+  }
+
+  if (typeWin == 3) {
+    x1 = width - w / 4;
+    y1 = h / 4;
+    x2 = w / 4;
+    y2 = height - h / 4;
+  }
+
+  if (typeWin == 4) {
+    x1 = w / 4;
+    y1 = h / 4;
+    x2 = width - w / 4;
+    y2 = height - h / 4;
+  }
+
+  stroke(255, 10, 10, 127);
+  line(x1, y1, x2, y2);
 }
 
 function mousePressed() {
